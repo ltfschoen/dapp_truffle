@@ -11,6 +11,7 @@ contract MetaCoin {
 		balances[tx.origin] = 10000;
 	}
 
+	// Send Meta coins between accounts. Execute as 'transaction' that persists changes to the network
 	function sendCoin(address receiver, uint amount) returns(bool sufficient) {
 		if (balances[msg.sender] < amount) return false;
 		balances[msg.sender] -= amount;
