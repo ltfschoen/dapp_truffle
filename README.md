@@ -3,6 +3,11 @@
   * Guide for Truffle >v3 http://truffleframework.com/docs/
   	* Warning: Deprecated guide for Truffle v1 and v2 at this link https://truffle.readthedocs.io/en/develop
 
+  * Install relevant Node.js version 	
+		```
+		nvm use v8.0.0
+		```
+
   * Install Truffle
       ```
       npm install -g truffle
@@ -36,14 +41,12 @@
 	truffle version
 	```
 
-* Truffle Interactive Console (REPL) 
-	* Run REPL on specified network and log communication between Truffle and the RPC
-		```
-		truffle console --network <name> --verbose-rpc
-		```
-	* Reference: http://truffleframework.com/docs/getting_started/console
-
 * Setup
+
+  * Install and switch to relevant Node.js version 	
+  	```
+  	nvm install
+  	```
 
   * Install Truffle https://truffle.readthedocs.io/en/develop/getting_started/installation/
     ```
@@ -57,15 +60,37 @@
     npm install -g ethereumjs-testrpc
     ```
 
-  * Install relevant Node.js version 	
-  	```
-  	nvm install
-  	```
-
 	* Run Truffle Dapp
 
-  	* Run Ethereum Client 
+  	* Run Ethereum Client (in separate Terminal tab)
+  		* Create DB folder
+  			```
+  			mkdir db && mkdir db/chain_database
+  			```
+			* Delete DB folder if starting fresh
+				```
+				rm -rf ./db
+				```
   		* [ethereumjs-testrpc](https://github.com/ethereumjs/testrpc)
+  			* Basic `testrpc`
+  			* Advanced
+	  			```
+					testrpc --account="0x0000000000000000000000000000000000000000000000000000000000000001, 2471238800000000000" \
+					        --account="0x0000000000000000000000000000000000000000000000000000000000000002, 4471238800000000000" \
+					        --unlock "0x0000000000000000000000000000000000000000000000000000000000000001" \
+					        --unlock "0x0000000000000000000000000000000000000000000000000000000000000002" \
+					        --blocktime 0 \
+					        --deterministic true \
+					        --port 8545 \
+					        --hostname localhost \
+					        --seed 'blah' \
+					        --gasPrice 20000000000 \
+					        --gasLimit 0x47E7C4 \
+					        --debug true \
+					        --mem true \
+					        --mnemonic 'something' \
+					        --db './db/chain_database' \
+	  			```
   		* Served on http://localhost:8545
 
 		* Deploy Contracts onto Network of choice (i.e. "development") defined in truffle.js
@@ -76,7 +101,7 @@
 
 			* Migrate: 
 				* Run Migrations Latest - `truffle migrate`
-				* Run Migrations Full - `truffle migrate --reset`
+				* Run Migrations Full - `truffle migrate --reset --network development`
 				* Run Contracts from specific Migration - `truffle migrate -f <number>`
 				* Run Migration on specific network called 'live' defined in truffle.js - `truffle migrate --network live`
 		
@@ -89,15 +114,24 @@
 				* NPM http://truffleframework.com/docs/getting_started/packages-npm
 				* EthPM http://truffleframework.com/docs/getting_started/packages-ethpm
 
-  	* Dapp Server
-  		* Build App and Run Dev Server: `npm run dev` (so changes are re-built automatically)
-  			* Served at http://localhost:8080
-
-		* Dapp Front-end:
+		* Build Dapp Front-end:
 			* Build Artifacts (requires Default or Custom Builder such as Webpack to be configured)
 				```
 				npm run build
 				``` 
+				(same as `truffle build`)
+
+  	* Run Dapp Server
+  		* Build App and Run Dev Server: `npm run dev` (so changes are re-built automatically)
+  			* Served at http://localhost:8080
+  			* Open `open http://localhost:8080` in browser
+
+  			* Screenshot:
+
+  				![alt tag](https://raw.githubusercontent.com/ltfschoen/dapp_truffle/master/screenshots/gui.png)
+
+				* Example:
+					* Within browser transfer say 10 wei to Account No.  0x0000000000000000000000000000000000000000000000000000000000000001 that we created on Ethereum TestRPC
 		
 		* Watch
 			* Watch for changes to contracts, app and config files. Rebuild app upon changes.
@@ -116,6 +150,25 @@
 
 		* Linter
   		* Run Linter: `npm run lint`
+
+* Truffle Interactive Console (REPL) 
+	* Run REPL on specified network and log communication between Truffle and the RPC
+		```
+		truffle console --network development --verbose-rpc
+		```
+
+		* Try the following commands
+			```
+			web3
+			var Web3 = require('web3');
+			var provider = new Web3.providers.HttpProvider("http://localhost:8545");
+			provider.isConnected();
+			var contract = require("truffle-contract");
+			```
+
+	* Reference: 
+		* http://truffleframework.com/docs/getting_started/console
+		* https://github.com/trufflesuite/truffle-contract
 
 * Writing Tests
 	* JavaScript Tests (Mocha, Chai) - http://truffleframework.com/docs/getting_started/javascript-tests
@@ -141,7 +194,7 @@
 * Publishing Smart Contract Package to EthPM (Ethereum Package Registry)that is integrated into Truffle 
 	
 	* References:
-		*  http://truffleframework.com/docs/getting_started/packages-ethpm
+		* http://truffleframework.com/docs/getting_started/packages-ethpm
 		* http://truffleframework.com/docs/advanced/networks
 
 	* Note: 
@@ -219,6 +272,9 @@
 	* truffle.js
 		* Main Truffle config file.
 
+* QUESTIONS
+	* Why does passing `--secure false` to `testrpc` result in error `Error: could not unlock signer account` even if I've already unlocked accounts to be generated
+
 * TODO
 	* [X] - Fix functionality of `truffle build` to resolve error. Await response from question posted in Truffle forum https://gitter.im/ConsenSys/truffle
 		```
@@ -232,8 +288,11 @@
 			* Use latest guide for Truffle >v3 http://truffleframework.com/docs/ instead of deprecated guide for Truffle v1 and v2 at this link https://truffle.readthedocs.io/en/develop
 	* [ ] - Read Interacting with Contracts http://truffleframework.com/docs/getting_started/contracts
 	* [ ] - Read Bootstrapping your application http://truffleframework.com/docs/getting_started/contracts
+	* [ ] - Do tutorial https://medium.com/@mvmurthy/full-stack-hello-world-voting-ethereum-dapp-tutorial-part-1-40d2d0d807c2 using web3 interface (similar to my https://github.com/ltfschoen/dapp_front_end, that provides web3 interface for managing accounts and transactions)
+	* [ ] - Read this Voting system that is used at a university https://github.com/pmarella2/BroncoVotes
 	* [ ] - Read Truffle Init Webpack documentation https://github.com/trufflesuite/truffle-init-webpack
 	* [ ] - Experiment with Ethereum TestRPC
+		* References: https://github.com/ltfschoen/dapp_front_end/blob/master/views/index.html
 	* [ ] - Integrate Webpack hotloader to sense when contracts or javascript have been recompiled and rebuild the app
 	* [ ] - Import dependencies http://solidity.readthedocs.io/en/latest/layout-of-source-files.html#importing-other-source-files
 	* [ ] - Interact with Ethereum.js Test RPC
