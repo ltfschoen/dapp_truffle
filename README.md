@@ -201,6 +201,8 @@
 			 * in a 'transaction' (WRITE DATA instead of a 'call') and callback function * only fires when transaction successful
 			 */
 			var meta;
+
+			// Refer to alternative better approach using `MetaCoin.at(...)`: https://github.com/trufflesuite/truffle-contract
 			MetaCoin.deployed().then(function(instance) {
 			  meta = instance;
 			  return meta.sendCoin(account_two, 10, {from: account_one});
@@ -424,6 +426,10 @@
 			* Use latest guide for Truffle >v3 http://truffleframework.com/docs/ instead of deprecated guide for Truffle v1 and v2 at this link https://truffle.readthedocs.io/en/develop
 	* [ ] - Read Interacting with Contracts http://truffleframework.com/docs/getting_started/contracts
 	* [ ] - Read Bootstrapping your application http://truffleframework.com/docs/getting_started/contracts
+	* [ ] - Solidity Smart Contracts Guide http://solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html
+	* [ ] - Build token similar to Curation Markets https://github.com/ConsenSys/curationmarkets
+	* [ ] - Web3 JavaScript API Learn in-depth https://github.com/ethereum/wiki/wiki/JavaScript-API
+	* [ ] - Truffle Tutorials/Blog http://truffleframework.com/tutorials/
 	* [ ] - Do tutorial https://medium.com/@mvmurthy/full-stack-hello-world-voting-ethereum-dapp-tutorial-part-1-40d2d0d807c2 using web3 interface (similar to my https://github.com/ltfschoen/dapp_front_end, that provides web3 interface for managing accounts and transactions)
 	* [ ] - Read this Voting system that is used at a university https://github.com/pmarella2/BroncoVotes
 	* [ ] - Read Truffle Init Webpack documentation https://github.com/trufflesuite/truffle-init-webpack
@@ -435,10 +441,13 @@
 	* [ ] - Deploy Custom Smart Contract Package to EthPM http://truffleframework.com/docs/getting_started/packages-ethpm
 	* [ ] - Write JavaScript Tests
 	* [ ] - Write Solidity Tests
+	* [ ] - Read Truffle Contract repo https://github.com/trufflesuite/truffle-contract
 	* [ ] - Check `truffle watch` integrated
 	* [ ] - Convert to standards compatible https://github.com/ConsenSys/Tokens
 	* [X] - Run deployment tasks depending on Network
 	* [ ] - Truffle Boxes (React.js, Redux, Uport Authentication)
+	* [ ] - Ethereum Homestead Documentation http://ethdocs.org/en/latest/
+	* [ ] - Ethereum Wiki https://github.com/ethereum/wiki/wiki
 	* [ ] - Cryptocurrency course at Coursera https://www.coursera.org/learn/cryptocurrency#creators
 
 * Credits
