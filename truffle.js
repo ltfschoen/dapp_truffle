@@ -1,33 +1,32 @@
+// Allows us to use ES6 in our migrations and tests.
+require('babel-register')
+
+// Default Bulder for Truffle >v3.0
 var DefaultBuilder = require("truffle-default-builder");
 
 module.exports = {
-  build: new DefaultBuilder() // specify the default builder configuration here.
-}
-
-module.exports = {
   /*
-   * Build config of front-end that by default invokes Default Builder.
-   * Alternative use `build` to use Custom Build process.
+   * Build config of front-end that uses `build` to either
+   * invokes Default Builder or Custom Build Pipeline process (i.e. webpack).
    *
    * Notes:
    * - If string specified on right hand side ends in a "/" it is interpreted as a directory
    * - All paths specified on right hand side are relative to the app/ directory
    * - Build target must only be called app.js for the Default Builder to append code to 
+   *
+   * Reference: 
+   * - https://github.com/trufflesuite/truffle-default-builder/tree/master
+   * - http://truffleframework.com/docs/advanced/build_processes
    */
-  build: {
-    // Copy ./app/index.html (right hand side) to ./build/index.html (left hand side).
-    "index.html": "index.html",
-    // Process all files in array, concatenating them to create app.js
-    "app.js": [
-      "javascripts/app.js"
-    ],
-    // Process all files in array, concatenating them to create app.css
-    "app.css": [
-      "stylesheets/app.css"
-    ],
-    // Copy whole directory to build destination.
-    "images/": "images/"
-  },
+  
+  // Runs the `webpack` command on each build.
+  //
+  // The following environment variables are set when running the command:
+  // WORKING_DIRECTORY: root location of the project
+  // BUILD_DESTINATION_DIRECTORY: expected destination of built assets (important for `truffle serve`)
+  // BUILD_CONTRACTS_DIRECTORY: root location of your build contract files (.sol.js)
+  //
+  build: "webpack",
   // RPC details of how to connect to Ethereum client for each network
   // 
   // Options:

@@ -1,21 +1,47 @@
 * Original Setup
-  * Guide https://truffle.readthedocs.io/en/develop
-  * Install Truffle https://truffle.readthedocs.io/en/develop/getting_started/installation/
+
+  * Guide for Truffle >v3 http://truffleframework.com/docs/
+  	* Warning: Deprecated guide for Truffle v1 and v2 at this link https://truffle.readthedocs.io/en/develop
+
+  * Install Truffle
       ```
       npm install -g truffle
       ```
-  * Install Ethereum TestRPC Client https://truffle.readthedocs.io/en/develop/getting_started/client/
+
+  * Install Ethereum TestRPC Client
       * https://github.com/ethereumjs/testrpc
+      * Benefits
+      	* Blockchain-in-memory runs only on development machine. 
+      	* Processes transactions instantly instead of waiting for default block time so can test code works quickly 
+      	* Immediate feedback when smart contracts run into errors. 
+      	* Ideal client for automated testing
+      	* Truffle knows how to use its special features to speed up test runtime by almost 90%
       ```
       npm install -g ethereumjs-testrpc
       ```
-  * Create Truffle Dapp https://truffle.readthedocs.io/en/develop/getting_started/project/
+
+  * Create Truffle Dapp - http://truffleframework.com/docs/getting_started/project
+
+  	* Installs truffle-init-webpack, a webpack project with Truffle. that includes contracts, migrations, tests, user interface and webpack build pipeline.
       ```
-      mkdir dapp_truffle; cd dapp_truffle; truffle init
+      mkdir dapp_truffle; cd dapp_truffle; truffle unbox;
       ```
-  * Compile https://truffle.readthedocs.io/en/develop/getting_started/compile/
-      * Solidity Contracts http://solidity.readthedocs.org/en/latest/contracts.html
+
+  * Compile
+      * Solidity Contracts
           * http://solidity.readthedocs.io/en/latest/contracts.html#libraries
+
+* System Info
+	```
+	truffle version
+	```
+
+* Truffle Interactive Console (REPL) 
+	* Run REPL on specified network and log communication between Truffle and the RPC
+		```
+		truffle console --network <name> --verbose-rpc
+		```
+	* Reference: http://truffleframework.com/docs/getting_started/console
 
 * Setup
 
@@ -31,21 +57,104 @@
     npm install -g ethereumjs-testrpc
     ```
 
-	* Run Truffle
+  * Install relevant Node.js version 	
+  	```
+  	nvm install
+  	```
 
-		* Compile:
-			* Compile Contract Latest - `truffle compile` (only changes since last compile)
-			* Compile Contract Full - `truffle compile --compile-all` (full compile)
-		
-		* Build Front-end:
-			* Build Artifacts - `truffle build` (requires Default or Custom Builder to be configured)
+	* Run Truffle Dapp
 
-		* Migrate: 
-			* Run Migrations Latest - `truffle migrate`
-			* Run Migrations Full - `truffle migrate --reset`
-			* Run Migration on specific network called 'live' defined in truffle.js - `truffle migrate --network live`
+  	* Run Ethereum Client 
+  		* [ethereumjs-testrpc](https://github.com/ethereumjs/testrpc)
+  		* Served on http://localhost:8545
+
+		* Deploy Contracts onto Network of choice (i.e. "development") defined in truffle.js
+
+			* Compile: - http://truffleframework.com/docs/getting_started/compile
+				* Compile Contract Latest - `truffle compile` (only changes since last compile)
+				* Compile Contract Full - `truffle compile --compile-all` (full compile)
+
+			* Migrate: 
+				* Run Migrations Latest - `truffle migrate`
+				* Run Migrations Full - `truffle migrate --reset`
+				* Run Contracts from specific Migration - `truffle migrate -f <number>`
+				* Run Migration on specific network called 'live' defined in truffle.js - `truffle migrate --network live`
 		
-		* Test: `truffle test`
+		* Dapp installation of NPM Dependencies from package.json into directory node_modules/ `npm install`
+
+		* Dapp installation of [EthPM](https://www.ethpm.com/) Dependencies from ethpm.json into directory installed_contracts/ `truffle install` (or `truffle install <package name>@<version>)
+			* Note:	
+				* Truffle search installed packages from EthPM first before searching for packages installed from NPM, so in the rare case of a naming conflict the package installed via EthPM is used
+			* References
+				* NPM http://truffleframework.com/docs/getting_started/packages-npm
+				* EthPM http://truffleframework.com/docs/getting_started/packages-ethpm
+
+  	* Dapp Server
+  		* Build App and Run Dev Server: `npm run dev` (so changes are re-built automatically)
+  			* Served at http://localhost:8080
+
+		* Dapp Front-end:
+			* Build Artifacts (requires Default or Custom Builder such as Webpack to be configured)
+				```
+				npm run build
+				``` 
+		
+		* Watch
+			* Watch for changes to contracts, app and config files. Rebuild app upon changes.
+			```
+			truffle watch
+			```
+
+			* Reference
+				* http://truffleframework.com/docs/advanced/commands
+		
+		* Test: 
+			```
+			truffle test
+			truffle test ./path/to/test/file.js
+			```
+
+		* Linter
+  		* Run Linter: `npm run lint`
+
+* Writing Tests
+	* JavaScript Tests (Mocha, Chai) - http://truffleframework.com/docs/getting_started/javascript-tests
+	* Solidity Contract Tests - http://truffleframework.com/docs/getting_started/solidity-tests
+
+* Contract and Migration Development
+
+	* Helper Methods to Scaffold New Contracts, Migrations, and Tests for Contracts http://truffleframework.com/docs/advanced/commands#networks
+		```
+		truffle create contract MyContract
+		truffle create migration MyContract
+		truffle create test MyTest
+		```
+
+	* Execute a JavaScript file in Truffle environment, and include web3, and set the default provider based on the `network` argument specified, and includes contracts as global objects whilst executing script 
+		```
+		truffle exec /path/to/my/script.js --network <name>
+		```
+		* References:
+			* http://truffleframework.com/docs/advanced/commands#networks
+			* http://truffleframework.com/docs/getting_started/scripts
+
+* Publishing Smart Contract Package to EthPM (Ethereum Package Registry)that is integrated into Truffle 
+	
+	* References:
+		*  http://truffleframework.com/docs/getting_started/packages-ethpm
+		* http://truffleframework.com/docs/advanced/networks
+
+	* Note: 
+		* EthPM currently exists on Ropsten test network
+		* List of existing Ethereum Packages https://www.ethpm.com/registry/packages
+
+	* Show Networks `truffle networks`
+		* Shows deployed addresses of all contracts on all networks
+
+	* Pre-Publish Cleaning - `truffle networks --clean`
+	(removes network artifacts not associated with named network that not want published)
+
+	* Publish package to Ethereum Package Registry `truffle publish` (all parameters pull from project config file)
 
 * Project Structure
 
@@ -58,10 +167,9 @@
 	* build/
 		* References
 			* truffle.js comments
-			* https://truffle.readthedocs.io/en/develop/getting_started/build/
-			* http://truffle.readthedocs.io/en/develop/advanced/configuration/
 		* Options	- configured in `truffle.js`
-			* Default Builder - https://truffle.readthedocs.io/en/develop/getting_started/build/
+			* Default Builder - 
+				* Important Note: in Truffle >v3.0 the Default Builder is in a separate module called truffle-default-builder. Refer to section "Usage in Truffle 3.0" at https://github.com/trufflesuite/truffle-default-builder/tree/master
 				* Advantages
 					* Automatically bootstraps app front-end in browser and imports compiled and deployed contract artifacts and information and Ethereum client config.
 					* Control over organisation of files and folders
@@ -85,7 +193,6 @@
 			* Solidity Library file http://solidity.readthedocs.io/en/latest/contracts.html#libraries
 			* Migrations Contract
 				* About - Deploy this contract in first migration to use Migrations Feature. Deploy libraries before contracts
-				* Reference - https://truffle.readthedocs.io/en/develop/getting_started/migrations/
 		* Examples
 			* Default Project
 				* MetaCoin
@@ -102,9 +209,9 @@
 			* Deploy libraries before contracts
 			* Link libraries to contracts with `deployer.link` and `deployer.autolink`
 			* Execute script relative to migrations file, to be run with `truffle exec` as part of deployment with `deployer.exec`
-			* Option to conditionallly run deployment tasks depending on Network https://truffle.readthedocs.io/en/develop/getting_started/migrations/
+			* Option to conditionallly run deployment tasks depending on Network
 		* References
-			* https://truffle.readthedocs.io/en/develop/getting_started/migrations/
+			* http://truffleframework.com/docs/getting_started/migrations
 	
 	* test/
 		* Usage - Test files for testing app and contracts
@@ -112,12 +219,8 @@
 	* truffle.js
 		* Main Truffle config file.
 
-* Guide
-	* Truffle
-		* * Guide https://truffle.readthedocs.io/en/develop
-
 * TODO
-	* [ ] - Fix functionality of `truffle build` to resolve error. Await response from question posted in Truffle forum https://gitter.im/ConsenSys/truffle
+	* [X] - Fix functionality of `truffle build` to resolve error. Await response from question posted in Truffle forum https://gitter.im/ConsenSys/truffle
 		```
 		Error building:
 
@@ -125,7 +228,21 @@
 
 		Build failed. See above.
 		```
+		* Solution:
+			* Use latest guide for Truffle >v3 http://truffleframework.com/docs/ instead of deprecated guide for Truffle v1 and v2 at this link https://truffle.readthedocs.io/en/develop
+	* [ ] - Read Interacting with Contracts http://truffleframework.com/docs/getting_started/contracts
+	* [ ] - Read Bootstrapping your application http://truffleframework.com/docs/getting_started/contracts
+	* [ ] - Read Truffle Init Webpack documentation https://github.com/trufflesuite/truffle-init-webpack
+	* [ ] - Experiment with Ethereum TestRPC
+	* [ ] - Integrate Webpack hotloader to sense when contracts or javascript have been recompiled and rebuild the app
 	* [ ] - Import dependencies http://solidity.readthedocs.io/en/latest/layout-of-source-files.html#importing-other-source-files
 	* [ ] - Interact with Ethereum.js Test RPC
+	* [ ] - Deploy Custom Smart Contract Package to EthPM http://truffleframework.com/docs/getting_started/packages-ethpm
+	* [ ] - Write JavaScript Tests
+	* [ ] - Write Solidity Tests
+	* [ ] - Check `truffle watch` integrated
 	* [ ] - Convert to standards compatible https://github.com/ConsenSys/Tokens
-	* [ ] - Run deployment tasks depending on Network https://truffle.readthedocs.io/en/develop/getting_started/migrations/
+	* [X] - Run deployment tasks depending on Network
+
+* Credits
+	* Build based on [truffle-init-webpack](https://github.com/trufflesuite/truffle-init-webpack by Douglas von Kohorn)
